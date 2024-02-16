@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Uploaded Files</title>
+</head>
+<body>
+    <h1>Uploaded Files</h1>
+    {% for folder, files in files_structure.items() %}
+        <h2>{{ folder }}</h2>
+        <ul>
+            {% for file in files %}
+                <li>{{ file }}</li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+    <a href="/">Back to Upload</a>
+</body>
+</html>

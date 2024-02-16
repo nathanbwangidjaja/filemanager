@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Success</title>
+</head>
+<body>
+    <h1>Files Uploaded Successfully</h1>
+    {% for folder, files in upload_details.items() %}
+        <h2>Folder: {{ folder }}</h2>
+        <ul>
+            {% for file in files %}
+                <li>{{ file }}</li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+    <a href="/">Upload More Files</a>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI File Manager</title>
+    <style>
+        .dropzone {
+            border: 2px dashed #0087F7;
+            border-radius: 5px;
+            background: white;
+            padding: 50px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="dropzone" id="dropzone">Drag and drop files here or click to select files</div>
+    <div id="uploadResult"></div>
+
+    <script>
+        const dropzone = document.getElementById('dropzone');
+        dropzone.ondragover = dropzone.ondragenter = function(evt) {
+            evt.preventDefault();
+        };
+
+        dropzone.ondrop = function(evt) {
+            evt.preventDefault();
+            const files = evt.dataTransfer.files;
+            const formData = new FormData();
+            for (let i = 0; i < files.length; i++) {
+                formData.append('file', files[i]);
+            }
+            fetch('/upload', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayUploads(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        };
+
+        function displayUploads(data) {
+            const resultDiv = document.getElementById('uploadResult');
+            resultDiv.innerHTML = ''; // Clear previous results
+            Object.keys(data).forEach(folder => {
+                const folderDiv = document.createElement('div');
+                folderDiv.innerHTML = `<strong>${folder}</strong>`;
+                const fileList = document.createElement('ul');
+                data[folder].forEach(file => {
+                    const fileItem = document.createElement('li');
+                    fileItem.textContent = file;
+                    fileList.appendChild(fileItem);
+                });
+                folderDiv.appendChild(fileList);
+                resultDiv.appendChild(folderDiv);
+            });
+        }
+    </script>
+    <!-- Add this line to your existing index.html -->
+    <a href="/files">View Uploaded Files</a>
+
+</body>
+</html>
